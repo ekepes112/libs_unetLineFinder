@@ -11,30 +11,30 @@ def compile_model(
     eval_metrics: list = [],
     model_id: str = 'prototype'
 ):
-  """
-  https://arxiv.org/pdf/1505.04597.pdf -> The network does not have any fully connected layers
-              and only uses the valid part of each convolution, i.e., the segmentation map only
-              contains the pixels, for which the full context is available in the input image.
-              This strategy allows the seamless segmentation of arbitrarily large images by an
-              overlap-tile strategy (see Figure 2). To predict the pixels in the border region
-              of the image, the missing context is extrapolated by mirroring the input image.
-              This tiling strategy is important to apply the network to large images, since
-              otherwise the resolution would be limited by the GPU memory.
+    """
+    https://arxiv.org/pdf/1505.04597.pdf -> The network does not have any fully connected layers
+                and only uses the valid part of each convolution, i.e., the segmentation map only
+                contains the pixels, for which the full context is available in the input image.
+                This strategy allows the seamless segmentation of arbitrarily large images by an
+                overlap-tile strategy (see Figure 2). To predict the pixels in the border region
+                of the image, the missing context is extrapolated by mirroring the input image.
+                This tiling strategy is important to apply the network to large images, since
+                otherwise the resolution would be limited by the GPU memory.
 
-  Args:
-      input_shape (tuple, optional): _description_. Defaults to (None,).
-      optimizer (opt.Optimizer, optional): _description_. Defaults to None.
-      starting_kernel_count (int, optional): _description_. Defaults to 32.
-      loss_func (str, optional): _description_. Defaults to None.
-      eval_metrics (list, optional): _description_. Defaults to [].
-      model_id (str, optional): _description_. Defaults to 'prototype'.
+    Args:
+        input_shape (tuple, optional): _description_. Defaults to (None,).
+        optimizer (opt.Optimizer, optional): _description_. Defaults to None.
+        starting_kernel_count (int, optional): _description_. Defaults to 32.
+        loss_func (str, optional): _description_. Defaults to None.
+        eval_metrics (list, optional): _description_. Defaults to [].
+        model_id (str, optional): _description_. Defaults to 'prototype'.
 
-  Raises:
-      ValueError: _description_
+    Raises:
+        ValueError: _description_
 
-  Returns:
-      _type_: _description_
-  """
+    Returns:
+        _type_: _description_
+    """
     model_id = f'unet_{model_id}'
     if optimizer is None:
         optimizer = opt.Adam(learning_rate=3e-4)
