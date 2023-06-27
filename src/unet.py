@@ -146,7 +146,7 @@ def compile_model(
         dilation_rate=1,
     )(contraction_5th_block)
     contraction_4th_block = Cropping1D(cropping=4)(contraction_4th_block)
-    expansion_1st_block = Concatenate(axis=1)([contraction_4th_block,expansion_1st_block])
+    expansion_1st_block = Concatenate(axis=2)([contraction_4th_block,expansion_1st_block])
     expansion_1st_block = Conv1D(
         filters=starting_kernel_count * 8,
         kernel_size=3,
@@ -172,7 +172,7 @@ def compile_model(
         dilation_rate=1,
     )(expansion_1st_block)
     contraction_3rd_block = Cropping1D(cropping=16)(contraction_3rd_block)
-    expansion_2nd_block = Concatenate(axis=1)([contraction_3rd_block,expansion_2nd_block])
+    expansion_2nd_block = Concatenate(axis=2)([contraction_3rd_block,expansion_2nd_block])
     expansion_2nd_block = Conv1D(
         filters=starting_kernel_count * 4,
         kernel_size=3,
@@ -198,7 +198,7 @@ def compile_model(
         dilation_rate=1,
     )(expansion_2nd_block)
     contraction_2nd_block = Cropping1D(cropping=40)(contraction_2nd_block)
-    expansion_3rd_block = Concatenate(axis=1)([contraction_2nd_block,expansion_3rd_block])
+    expansion_3rd_block = Concatenate(axis=2)([contraction_2nd_block,expansion_3rd_block])
     expansion_3rd_block = Conv1D(
         filters=starting_kernel_count * 2,
         kernel_size=3,
@@ -224,7 +224,7 @@ def compile_model(
         dilation_rate=1,
     )(expansion_3rd_block)
     contraction_1st_block = Cropping1D(cropping=88)(contraction_1st_block)
-    expansion_4th_block = Concatenate(axis=1)([contraction_1st_block,expansion_4th_block])
+    expansion_4th_block = Concatenate(axis=2)([contraction_1st_block,expansion_4th_block])
     expansion_4th_block = Conv1D(
         filters=starting_kernel_count,
         kernel_size=3,
