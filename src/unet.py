@@ -1,7 +1,7 @@
 from tensorflow import optimizers as opt
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Conv1D, MaxPool1D, Activation, Concatenate, UpSampling1D,\
-  Conv1DTranspose, Cropping1D
+  Conv1DTranspose, Cropping1D, Softmax
 
 def compile_model(
     input_shape: tuple = (None,),
@@ -244,7 +244,9 @@ def compile_model(
     output = Conv1D(
         filters=output_dim,
         kernel_size=1,
+        activation='relu',
     )(expansion_4th_block)
+    output = Softmax()(output)
 
     model = Model(
         model_input,
