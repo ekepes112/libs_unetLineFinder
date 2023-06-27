@@ -5,6 +5,7 @@ from tensorflow.keras.layers import Input, Conv1D, MaxPool1D, Activation, Concat
 
 def compile_model(
     input_shape: tuple = (None,),
+    output_dim: int = 2,
     optimizer: opt.Optimizer = None,
     starting_kernel_count: int = 32,
     loss_func: str = None,
@@ -241,7 +242,7 @@ def compile_model(
     expansion_4th_block = Activation('relu')(expansion_4th_block)
     ################################################################################
     output = Conv1D(
-        filters=2,
+        filters=output_dim,
         kernel_size=1,
     )(expansion_4th_block)
 
