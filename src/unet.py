@@ -250,7 +250,6 @@ def compile_model(
         output,
         name=model_id
     )
-
     model.compile(
         optimizer=optimizer,
         loss=loss_func,
