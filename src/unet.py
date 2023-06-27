@@ -136,7 +136,7 @@ def compile_model(
     ################################################################################
     ################################################################################
     ################################################################################
-    expansion_1st_block = UpSampling1D(size=2)(contraction_5th_block)
+    # expansion_1st_block = UpSampling1D(size=2)(contraction_5th_block)
     expansion_1st_block = Conv1DTranspose(
         filters=starting_kernel_count * 8,
         kernel_size=2,
@@ -144,7 +144,7 @@ def compile_model(
         padding='valid',
         output_padding=None,
         dilation_rate=1,
-    )(expansion_1st_block)
+    )(contraction_5th_block)
     contraction_4th_block = Cropping1D(cropping=4)(contraction_4th_block)
     expansion_1st_block = Concatenate(axis=1)([contraction_4th_block,expansion_1st_block])
     expansion_1st_block = Conv1D(
@@ -162,7 +162,7 @@ def compile_model(
     )(expansion_1st_block)
     expansion_1st_block = Activation('relu')(expansion_1st_block)
     ################################################################################
-    expansion_2nd_block = UpSampling1D(size=2)(expansion_1st_block)
+    # expansion_2nd_block = UpSampling1D(size=2)(expansion_1st_block)
     expansion_2nd_block = Conv1DTranspose(
         filters=starting_kernel_count * 4,
         kernel_size=2,
@@ -170,7 +170,7 @@ def compile_model(
         padding='valid',
         output_padding=None,
         dilation_rate=1,
-    )(expansion_2nd_block)
+    )(expansion_1st_block)
     contraction_3rd_block = Cropping1D(cropping=16)(contraction_3rd_block)
     expansion_2nd_block = Concatenate(axis=1)([contraction_3rd_block,expansion_2nd_block])
     expansion_2nd_block = Conv1D(
@@ -188,7 +188,7 @@ def compile_model(
     )(expansion_2nd_block)
     expansion_2nd_block = Activation('relu')(expansion_2nd_block)
     ################################################################################
-    expansion_3rd_block = UpSampling1D(size=2)(expansion_2nd_block)
+    # expansion_3rd_block = UpSampling1D(size=2)(expansion_2nd_block)
     expansion_3rd_block = Conv1DTranspose(
         filters=starting_kernel_count * 2,
         kernel_size=2,
@@ -196,7 +196,7 @@ def compile_model(
         padding='valid',
         output_padding=None,
         dilation_rate=1,
-    )(expansion_3rd_block)
+    )(expansion_2nd_block)
     contraction_2nd_block = Cropping1D(cropping=40)(contraction_2nd_block)
     expansion_3rd_block = Concatenate(axis=1)([contraction_2nd_block,expansion_3rd_block])
     expansion_3rd_block = Conv1D(
@@ -214,7 +214,7 @@ def compile_model(
     )(expansion_3rd_block)
     expansion_3rd_block = Activation('relu')(expansion_3rd_block)
     ################################################################################
-    expansion_4th_block = UpSampling1D(size=2)(expansion_3rd_block)
+    # expansion_4th_block = UpSampling1D(size=2)(expansion_3rd_block)
     expansion_4th_block = Conv1DTranspose(
         filters=starting_kernel_count,
         kernel_size=2,
@@ -222,7 +222,7 @@ def compile_model(
         padding='valid',
         output_padding=None,
         dilation_rate=1,
-    )(expansion_4th_block)
+    )(expansion_3rd_block)
     contraction_1st_block = Cropping1D(cropping=88)(contraction_1st_block)
     expansion_4th_block = Concatenate(axis=1)([contraction_1st_block,expansion_4th_block])
     expansion_4th_block = Conv1D(
