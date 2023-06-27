@@ -42,25 +42,47 @@ def add_profile_to_spectrum(
     spectrum[shift:(shift + len(profile))] += profile
     return spectrum
 
+# def generate_spectrum_with_profiles(
+#     wavelengths: np.array,
+#     line_count: int,
+#     profile_widths: int
+# ) -> tuple:
+#     spectrum = np.zeros_like(wavelengths)
+#     box_coordinates = []
+#     line_maxima = []
+#     for _ in range(line_count):
+#         line_intensities = generate_random_profile(profile_widths)
+#         profile_start = np.random.randint(1, len(spectrum) - len(line_intensities))
+#         profile_box = get_line_boundaries(line_intensities)
+#         box_coordinates.append(
+#             profile_box[1] + profile_start
+#         )
+#         line_maxima.append(profile_box[0])
+#         spectrum = add_profile_to_spectrum(
+#             spectrum,
+#             line_intensities,
+#             shift=profile_start
+#         )
+#     return (spectrum, box_coordinates, line_maxima)
+
 def generate_spectrum_with_profiles(
     wavelengths: np.array,
     line_count: int,
     profile_widths: int
 ) -> tuple:
     spectrum = np.zeros_like(wavelengths)
-    box_coordinates = []
-    line_maxima = []
+    ground_truth = np.zeros_like(wavelengths)
     for _ in range(line_count):
         line_intensities = generate_random_profile(profile_widths)
         profile_start = np.random.randint(1, len(spectrum) - len(line_intensities))
-        profile_box = get_line_boundaries(line_intensities)
-        box_coordinates.append(
-            profile_box[1] + profile_start
+        ground_truth = add_profile_to_spectrum(
+            ground_truth,
+            line_intensities != 0,
+            shift=profile_start
         )
-        line_maxima.append(profile_box[0])
         spectrum = add_profile_to_spectrum(
             spectrum,
             line_intensities,
             shift=profile_start
         )
-    return (spectrum, box_coordinates, line_maxima)
+    return (spectrum, ground_truth)
