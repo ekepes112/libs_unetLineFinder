@@ -2,6 +2,7 @@ import numpy as np
 import random
 from scipy.stats import norm, cauchy
 from scipy.special import wofz
+import src.config as config
 
 
 class ProfileGenerator:
@@ -132,3 +133,30 @@ def add_recombination_background_to_spectrum(
         mode='same'
     )
     return spectrum + recombination_background
+
+def augment_spectrum(
+    spectrum: np.array,
+    **kwargs
+) -> np.array:
+    augmented_spectrum = add_recombination_background_to_spectrum(spectrum)
+    augmented_spectrum = add_noise_to_spectrum(
+        augmented_spectrum,
+        noise_std=kwargs['noise_std'],
+        noise_center=kwargs['noise_center']
+    )
+    augmented_spectrum = add_polynomial_baseline_to_spectrum(
+        augmented_spectrum,
+        scaling_factor=kwargs['scaling_factor_for_polynomial']
+    )
+    augmented_spectrum = add_blackbody_continuum_to_spectrum(
+        augmented_spectrum,
+        wavelengths=kwargs['wavelengths'],
+        blackbody_temperature=np.random.randint(
+            config.MIN_TEMPERATURE,
+            config.MAX_TEMPERATURE
+        ),
+        scaling_factor=kwargs['scaling_factor_for_blackbody']
+    )
+    augmented_spectrum -= np.min(augmented_spectrum)
+    augmented_spectrum /= np.max(augmented_spectrum)
+    return augmented_spectrum
