@@ -1,3 +1,7 @@
+PROJECT_NAME = 'unetLineFinder'
+DRIVE_PATH = '/content/onedrive'
+SAVE_FIG = False
+
 MEAN_LINE_COUNT = 250
 PROFILE_RESOLUTION = 250
 SPECTRUM_START = 400
