@@ -44,10 +44,12 @@ def voigt(
     z = (x + 1j*gamma)/(sigma*np.sqrt(2))
     return np.real(wofz(z))/(sigma*np.sqrt(2*np.pi))
 
-def get_line_boundaries(line_profile: np.array) -> list:
-    PERCENTILE_AT_BOUNDARY = .15
+def get_line_boundaries(
+    line_profile: np.array,
+    percentile_at_boundary: float = .95,
+) -> list:
     line_max = np.max(line_profile)
-    boundary_value = line_max * PERCENTILE_AT_BOUNDARY
+    boundary_value = line_max * percentile_at_boundary
     return np.where(boundary_value <= line_profile)[0]
 
 def add_profile_to_spectrum(
@@ -61,7 +63,8 @@ def add_profile_to_spectrum(
 def generate_spectrum_with_profiles(
     wavelengths: np.array,
     line_count: int,
-    profile_generator: ProfileGenerator
+    profile_generator: ProfileGenerator,
+    percentile_at_boundary: float = .95,
 ) -> tuple:
     spectrum = np.zeros_like(wavelengths)
     ground_truth = np.zeros_like(wavelengths)
@@ -70,7 +73,12 @@ def generate_spectrum_with_profiles(
         line_intensities = profile_generator.generate()
         line_maxima.append(np.max(line_intensities))
         profile_start = np.random.randint(1, len(spectrum) - len(line_intensities))
-        ground_truth[get_line_boundaries(line_intensities) + profile_start] += 1
+        ground_truth[
+            get_line_boundaries(
+                line_intensities,
+                percentile_at_boundary
+            ) + profile_start
+        ] += 1
         spectrum = add_profile_to_spectrum(
             spectrum,
             line_intensities,
